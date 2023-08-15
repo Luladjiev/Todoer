@@ -1,5 +1,5 @@
 //
-//  AddView.swift
+//  AddScreen.swift
 //  Todoer
 //
 //  Created by Peter Luladjiev on 12.08.23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AddView: View {
+struct AddScreen: View {
     enum FocusField {
         case title
     }
@@ -74,7 +74,7 @@ struct AddView: View {
 struct AddView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            AddView()
+            AddScreen()
         }
         .environmentObject(ListViewModel())
     }

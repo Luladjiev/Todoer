@@ -9,13 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        NavigationStack {
-            ListView()
-                .navigationDestination(for: Routes.self) { route in
-                    switch route {
-                    case .Add:
-                        AddView()
-                    }
+        TabView {
+            ListScreen()
+                .tabItem {
+                    Label("Todo", systemImage: "list.bullet")
+                }
+            
+            CompletedScreen()
+                .tabItem {
+                    Label("Completed", systemImage: "checkmark.circle")
                 }
         }
     }

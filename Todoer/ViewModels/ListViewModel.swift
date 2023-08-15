@@ -8,11 +8,16 @@
 import Foundation
 
 class ListViewModel: ObservableObject {
-    @Published var items: [ItemModel] = [] {
+    var allItems: [ItemModel] = [] {
         didSet {
             saveItems()
+            items = allItems.filter({ $0.isCompleted == false})
+            completedItems = allItems.filter({ $0.isCompleted })
         }
     }
+    
+    @Published var items: [ItemModel] = []
+    @Published var completedItems: [ItemModel] = []
     
     let itemsKey = "items_list"
     
@@ -26,29 +31,29 @@ class ListViewModel: ObservableObject {
             let newItems = try? JSONDecoder().decode([ItemModel].self, from: data)
         else { return }
         
-        self.items = newItems
+        self.allItems = newItems
     }
     
     func addItem(title: String) {
-        items.append(ItemModel(title: title, isCompleted: false))
+        allItems.append(ItemModel(title: title, isCompleted: false))
     }
     
     func deleteItem(indexSet: IndexSet) {
-        items.remove(atOffsets: indexSet)
+        allItems.remove(atOffsets: indexSet)
     }
     
     func moveItem(from: IndexSet, to: Int) {
-        items.move(fromOffsets: from, toOffset: to)
+        allItems.move(fromOffsets: from, toOffset: to)
     }
     
     func updateItem(item: ItemModel) {
-        if let index = items.firstIndex(where: { $0.id == item.id }) {
-            items[index] = item.updateCompletion()
+        if let index = allItems.firstIndex(where: { $0.id == item.id }) {
+            allItems[index] = item.updateCompletion()
         }
     }
     
     func saveItems() {
-        if let encodedData = try? JSONEncoder().encode(items) {
+        if let encodedData = try? JSONEncoder().encode(allItems) {
             UserDefaults.standard.set(encodedData, forKey: itemsKey)
         }
     }
